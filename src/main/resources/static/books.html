@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books - LMS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">📚 Library Management System</div>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="books.html" class="active">Books</a>
+        <a href="members.html">Members</a>
+        <a href="borrow.html">Borrow / Return</a>
+    </nav>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Add New Book</h2>
+        <div id="bookAlert" class="alert"></div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="title" placeholder="Book title">
+            </div>
+            <div class="form-group">
+                <label>Author</label>
+                <input type="text" id="author" placeholder="Author name">
+            </div>
+            <div class="form-group">
+                <label>ISBN</label>
+                <input type="text" id="isbn" placeholder="ISBN number">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" id="category" placeholder="Category">
+            </div>
+            <div class="form-group">
+                <label>Total Copies</label>
+                <input type="number" id="totalCopies" placeholder="Number of copies" min="1">
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="addBook()">Add Book</button>
+    </div>
+
+    <div class="card">
+        <h2>All Books</h2>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by title or author...">
+            <button class="btn btn-primary" onclick="searchBooks()">Search</button>
+            <button class="btn btn-success" onclick="loadBooks()">All</button>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Category</th>
+                    <th>Total</th>
+                    <th>Available</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="booksTable">
+                <tr><td colspan="8" style="text-align:center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/books.js"></script>
+</body>
+</html>

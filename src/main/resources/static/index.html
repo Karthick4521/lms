@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">📚 Library Management System</div>
+    <nav>
+        <a href="index.html" class="active">Dashboard</a>
+        <a href="books.html">Books</a>
+        <a href="members.html">Members</a>
+        <a href="borrow.html">Borrow / Return</a>
+    </nav>
+</div>
+
+<div class="container">
+
+    <div class="stats-grid">
+        <div class="stat-card books">
+            <h3 id="totalBooks">0</h3>
+            <p>📖 Total Books</p>
+        </div>
+        <div class="stat-card members">
+            <h3 id="totalMembers">0</h3>
+            <p>👥 Total Members</p>
+        </div>
+        <div class="stat-card borrowed">
+            <h3 id="totalBorrowed">0</h3>
+            <p>📤 Books Borrowed</p>
+        </div>
+        <div class="stat-card overdue">
+            <h3 id="totalOverdue">0</h3>
+            <p>⚠️ Overdue Books</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Recent Borrow Records</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Book</th>
+                    <th>Member</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody id="recentRecords">
+                <tr><td colspan="6" style="text-align:center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const API = 'http://localhost:8080/api';
+
+    async function loadDashboard() {
+        try {
+            const [books, members, borrows, overdue] = await Promise.all([
+                fetch(`${API}/books`).then(r => r.json()),
+                fetch(`${API}/members`).then(r => r.json()),
+                fetch(`${API}/borrow`).then(r => r.json()),
+                fetch(`${API}/borrow/overdue`).then(r => r.json())
+            ]);
+
+            document.getElementById('totalBooks').textContent = books.length;
+            document.getElementById('totalMembers').textContent = members.length;
+            document.getElementById('totalBorrowed').textContent =
+                borrows.filter(b => b.status === 'BORROWED').length;
+            document.getElementById('totalOverdue').textContent = overdue.length;
+
+            const tbody = document.getElementById('recentRecords');
+            if (borrows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No records found</td></tr>';
+            } else {
+                tbody.innerHTML = borrows.slice(-10).reverse().map(b => `
+                    <tr>
+                        <td>${b.id}</td>
+                        <td>${b.book.title}</td>
+                        <td>${b.member.name}</td>
+                        <td>${b.borrowDate}</td>
+                        <td>${b.dueDate}</td>
+                        <td><span class="badge ${b.status === 'RETURNED' ? 'badge-success' :
+                            b.status === 'OVERDUE' ? 'badge-danger' : 'badge-warning'}">
+                            ${b.status}</span></td>
+                    </tr>`).join('');
+            }
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    loadDashboard();
+</script>
+</body>
+</html>

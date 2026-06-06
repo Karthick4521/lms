@@ -2,7 +2,6 @@ package com.library.lms.controller;
 
 import com.library.lms.entity.member;
 import com.library.lms.service.MemberService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class MemberController {
 
     // POST add new member
     @PostMapping
-    public ResponseEntity<member> addMember(@Valid @RequestBody member member) {
+    public ResponseEntity<member> addMember( @RequestBody member member) {
         member saved = memberService.addMember(member);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -43,7 +42,7 @@ public class MemberController {
     @PutMapping("/{id}")
     public ResponseEntity<member> updateMember(
             @PathVariable Long id,
-            @Valid @RequestBody member member) {
+             @RequestBody member member) {
         try {
             return ResponseEntity.ok(memberService.updateMember(id, member));
         } catch (RuntimeException e) {

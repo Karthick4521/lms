@@ -2,7 +2,6 @@ package com.library.lms.controller;
 
 import com.library.lms.entity.book;
 import com.library.lms.service.BookService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class BookController {
 
     // POST add new book
     @PostMapping
-    public ResponseEntity<book> addBook(@Valid @RequestBody book book) {
+    public ResponseEntity<book> addBook( @RequestBody book book) {
         book saved = bookService.addBook(book);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -43,7 +42,7 @@ public class BookController {
     @PutMapping("/{id}")
     public ResponseEntity<book> updateBook(
             @PathVariable Long id,
-            @Valid @RequestBody book book) {
+             @RequestBody book book) {
         try {
             return ResponseEntity.ok(bookService.updateBook(id, book));
         } catch (RuntimeException e) {
